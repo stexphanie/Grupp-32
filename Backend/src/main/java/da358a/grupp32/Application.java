@@ -1,9 +1,17 @@
 package da358a.grupp32;
 
 import spark.Spark;
+import java.io.IOException;
 
-public class Application {
+/**
+ * The entry point of the backend application.
+ * @author Kasper S. Skott
+ */
+class Application {
 
+    /**
+     * Starts the server application
+     */
     public static void main(String[] args) {
 
         Spark.initExceptionHandler((e) -> {
@@ -13,10 +21,21 @@ public class Application {
 
         Spark.port(8192);
 
-        Spark.get("/", (request, response) -> {
-           return "<h1>Hello, world!</h1>";
-        });
+        try {
+            Controller apiController = new Controller();
 
+            // Route requests to the root URL
+            Spark.get("/",
+                    apiController.homePageHandler);
+
+            // Route requests to the conversion service
+            Spark.get("/api/v1/conversion/:currency",
+                    apiController.conversionHandler);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
 }
