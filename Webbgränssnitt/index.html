@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zxx">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Convert Currency</title>
+        <link rel="stylesheet" href="style.css" type="text/css" />
+        <!--ör att använda ett sådant typsnitt måste det först importeras. Vi gör det genom att använda ett speciellt CSS-direktiv, @import.-->
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap");
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
+        <script src="style.js" defer></script>
+    </head>
+    <body>
+        <section id="container">
+            <header>
+                <h1>CONVERT CURRENCY</h1>
+                <h4>Select your base currency and provide an amount.</h4>
+            </header>
+
+            <section id="boxes">
+
+            <section id="box">
+                <input id="fromAmount" type="text" />
+                <select id="from">
+                    <option value="AUD">(AFN)</option>
+                    <option value="ALL">(ALL)</option>
+                    <option value="USD">(USD)</option>
+                    <option value="EUR">(EUR)</option>
+                    <option value="AUD">(AUD)</option>
+                    <option value="SEK" selected>(SEK)</option>
+                    <option value="GBP">(GBP)</option>
+                    <option value="PLN">(PLN)</option>
+                </select>
+            </section>
+
+            <button id="changeColor" type="btn" onclick="myFunction()">Click Me!</button>
+            
+            <section id="box2">
+                <input id="toAmount" type="text" />
+                <select id="to">
+                    <option value="AUD">(AFN)</option>
+                    <option value="ALL">(ALL)</option>
+                    <option value="USD">(USD)</option>
+                    <option value="EUR" selected>(EUR)</option>
+                    <option value="AUD">(AUD)</option>
+                    <option value="SEK">(SEK)</option>
+                    <option value="GBP">(GBP)</option>
+                    <option value="PLN">(PLN)</option>
+                </select>
+            </section>
+        </section>
+
+           
+        </section>
+    </body>
+</html>
