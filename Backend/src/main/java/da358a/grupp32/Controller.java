@@ -14,13 +14,23 @@ import java.nio.file.Paths;
 class Controller {
 
     private String homePageSrc;
+    private String apiDocSrc;
     private Gson gson;
+    private CurrencyCache currencyCache;
 
     // Handles requests to the home URL
     Route homePageHandler = (request, response) -> {
         response.status(200);
         response.header("Content-Type", "text/html");
         response.body(homePageSrc);
+        return response.body();
+    };
+
+    // Handles requests to the api documentation URL
+    Route apiDocHandler = (request, response) -> {
+        response.status(200);
+        response.header("Content-Type", "text/html");
+        response.body(apiDocSrc);
         return response.body();
     };
 
@@ -57,17 +67,24 @@ class Controller {
     };
 
     /**
-     * Initializes the Controller and loads the html file,
-     * located in the "Frontend" folder
+     * Initializes the Controller and loads resources.
      * @throws IOException if there were problems with loading the html file
      */
     Controller() throws IOException {
-        byte[] homePageFile = Files.readAllBytes(
-                Paths.get("../Frontend/index.html"));
-
-        homePageSrc = new String(homePageFile);
+        homePageSrc = new String(Files.readAllBytes(
+                Paths.get("../Frontend/index.html")));
+        apiDocSrc = new String(Files.readAllBytes(
+                Paths.get("../Frontend/api_doc.html")));
 
         gson = new GsonBuilder().setPrettyPrinting().create();
+        currencyCache = new CurrencyCache(gson);
+    }
+
+    /**
+     * Stops the controller, and saves the currency cache to disk.
+     */
+    void stop() {
+        currencyCache.saveCacheToDisk();
     }
 
 }
