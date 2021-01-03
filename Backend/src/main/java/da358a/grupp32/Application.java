@@ -38,8 +38,10 @@ public class Application {
                     apiController.apiDocHandler);
 
             // Route requests to the conversion service
-            get("/api/v1/conversion/:currency",
+            get("/api/v1/conversion",
                     apiController.conversionHandler);
+
+            awaitInitialization();
 
             // Set up reading from the console
             BufferedReader reader =

@@ -12,6 +12,7 @@ import java.nio.file.StandardOpenOption;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.Optional;
 
 /**
  * Stores and manages currency conversion rates, as well as provides
@@ -23,6 +24,7 @@ import java.util.Hashtable;
  * That updated rate will in turn be valid for 24 hours, and so on.
  * These rates are also written to disk when the server application
  * closes. They are (obviously) loaded at start up, if the file exists.
+ * @author Kasper S. Skott
  */
 class CurrencyCache {
 
@@ -108,7 +110,9 @@ class CurrencyCache {
 
     /**
      * Updates the internal conversion data in the cache through
-     * a call to the currency API.
+     * a call to the currency API. If, for some reason, a new rate
+     * could be not be fetched, it uses the old one, and will try
+     * to refresh at the next call.
      * @param prefCurrency the currency to convert into
      * @param currencyToConvert what currency the amount in specified in
      * @return a new and updated CachedConversionRate object
@@ -128,8 +132,14 @@ class CurrencyCache {
             right = currencyToConvert;
         }
 
-        cachedRate.refresh(apiHandler.getConversionRate(left, right));
-        cache.put(buildCacheKey(prefCurrency, currencyToConvert), cachedRate);
+        Optional<Double> rate = apiHandler.getConversionRate(left, right);
+        if (rate.isPresent()) { // Use the new rate and cache it
+            cachedRate.refresh(rate.get());
+            cache.put(buildCacheKey(prefCurrency, currencyToConvert), cachedRate);
+        }
+        else { // Use the already cached rate and don't refresh it
+            cachedRate = cache.get(buildCacheKey(prefCurrency, currencyToConvert));
+        }
 
         return cachedRate;
     }

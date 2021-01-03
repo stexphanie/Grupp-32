@@ -92,3 +92,7 @@ fabric.properties
 
 # API KEY FILE
 geokey.txt
+currencykey.txt
+
+# CACHE FILE
+currency_cache.json
