@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap");
+
+        .example {
+            font-family: 'Lucida Console';
+            width: fit-content;
+            max-width: inherit;
+            background-color: rgb(239, 240, 241);
+            margin-left: 20px;
+            padding: 10px;
+            white-space: pre-wrap;
+        }
+
+        #main-content {
+            width: 75%;
+            background-color: rgb(253, 254, 255);
+            margin-left: 10%;
+            margin-right: 10%;
+            margin-top: 50px;
+            margin-bottom: 50px;
+            padding-left: 40px;
+            padding-right: 40px;
+            padding-top: 5px;
+            padding-bottom: 50px;
+        }
+    </style>
+    <title>API Documentation</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <a href="index.html">[Back]</a>
+    <div id="main-content">
+        <h1>API Documentation</h1>
+        <h2>GET /api/v1/conversion</h2>
+        <p>
+            Converts an amount in the local currency into you preferred currency. 
+        </p>
+        <p>
+            A request must be made with the header "Accept: application/json".
+        </p>
+        <br>
+        
+        <h3>Parameters</h3>
+        <ul>
+            <li>preferredCurrency</li>
+            <li>amount</li>
+        </ul>
+        <p>You must provide a way to find the local currency, either by country, city, or position (lat, lon).</p>
+        <ul>
+            <li>country</li>
+            <li>city</li>
+            <li>lat</li>
+            <li>lon</li>
+        </ul>
+        <br>
+
+        <h3>Response</h3>
+        <p>A successful API call will return a JSON object with the follow data</p>
+        <ul>
+            <li>prefCurrency</li>
+            <li>currencyConverted</li>
+            <li>returnAmount</li>
+        </ul>
+<div class="example">{
+    "prefCurrency": "USD",
+    "currencyConverted": "SEK",
+    "returnAmount": 24.4141
+}</div>
+        <p>
+            If something isn't right, the response will contain a single 'fault' field that 
+            gives information about what was wrong
+        </p>
+<div class="example">{
+    "fault": "Something went wrong"
+}</div>
+        <br>
+
+        <h3>Examples</h3>
+        <p>By position:</p>
+        <p class="example">/api/v1/conversion?preferredCurrency=USD&amount=199.99&lat=55.604980&lon=13.003822</p>
+        <br>
+
+</body>
+</html>
