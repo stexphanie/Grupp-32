@@ -1,41 +1,69 @@
 package da358a.grupp32;
 
-import spark.Spark;
+import static spark.Spark.*;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * The entry point of the backend application.
  * @author Kasper S. Skott
  */
-class Application {
+public class Application {
 
     /**
      * Starts the server application
      */
     public static void main(String[] args) {
 
-        Spark.initExceptionHandler((e) -> {
+        externalStaticFileLocation("../Frontend");
+
+        initExceptionHandler((e) -> {
             System.err.println("Spark initialization failed");
             System.exit(1);
         });
 
-        Spark.port(8192);
+        port(8192);
 
         try {
             Controller apiController = new Controller();
 
             // Route requests to the root URL
-            Spark.get("/",
+            get("/",
                     apiController.homePageHandler);
 
+           // Route requests to the api documentation URL
+            get("/api/v1",
+                    apiController.apiDocHandler);
+
             // Route requests to the conversion service
-            Spark.get("/api/v1/conversion/:currency",
+            get("/api/v1/conversion",
                     apiController.conversionHandler);
+
+            awaitInitialization();
+
+            // Set up reading from the console
+            BufferedReader reader =
+                    new BufferedReader(new InputStreamReader(System.in));
+
+            // Wait for the 'exit' user input. If the application isn't closed
+            // using this method, the currency cache will not be saved.
+            String input;
+            do {
+                input = reader.readLine();
+            }
+            while (!input.equals("exit"));
+
+            // Exit gracefully, saving currency cache to disk
+            apiController.stop();
+            stop();
         }
         catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
+
     }
 
 }
