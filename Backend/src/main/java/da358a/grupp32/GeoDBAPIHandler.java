@@ -1,7 +1,9 @@
 package da358a.grupp32;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.IOException;
 import java.net.URI;
@@ -22,11 +24,10 @@ public class GeoDBAPIHandler {
         this.key = Files.readString(Path.of("geokey.txt"), StandardCharsets.UTF_8);
     }
 
-    public String makeRequest(){
-
+    public String getCountryDetails(String countryCodeISO){
         String res = null;
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://wft-geo-db.p.rapidapi.com/v1/geo/cities"))
+                .uri(URI.create("https://wft-geo-db.p.rapidapi.com/v1/geo/countries/"+countryCodeISO))
                 .header("x-rapidapi-key", key)
                 .header("x-rapidapi-host", "wft-geo-db.p.rapidapi.com")
                 .method("GET", HttpRequest.BodyPublishers.noBody())
@@ -38,10 +39,29 @@ public class GeoDBAPIHandler {
                 //OKAY BOSS
                 res = response.body();
             }
+            else if(response.statusCode() == 400){
+                //BAD REQUEST
+                System.out.println("bad request");
+                System.out.println(response.body());
+            }
+            else if(response.statusCode() == 401){
+                //UNAUTHORIZED
+                System.out.println("unauthorized");
+                System.out.println(response.body());
+            }
             else if(response.statusCode() == 403){
-                //GATEWAY ERROR SOMETHING BAD
+                //FORBIDDEN
+                System.out.println("forbidden");
+                System.out.println(response.body());
+            }
+            else if(response.statusCode()== 404){
+                //NOT FOUND
+                System.out.println("not found");
+                System.out.println(response.body());
             }
             else {
+                //IDK
+                System.out.println("idk");
                 System.out.println(response.statusCode());
             }
 
@@ -51,14 +71,32 @@ public class GeoDBAPIHandler {
             e.printStackTrace();
         }
 
+       // System.out.println(res);
         return res;
 
     }
 
+
+
+
+
+
     public static void main(String[] args) {
         try {
-            GeoDBAPIHandler handler = new GeoDBAPIHandler();
 
+            GeoDBAPIHandler handler = new GeoDBAPIHandler();
+            JsonObject object = JsonParser.parseString(handler.getCountryDetails("US")).getAsJsonObject();
+            System.out.println(object.toString());
+            JsonObject data = object.getAsJsonObject("data");
+            JsonArray array = data.getAsJsonArray("currencyCodes");
+            String currency = array.get(0).getAsString();
+            System.out.println(currency);
+
+
+
+
+
+            //System.out.println(currency);
         } catch (IOException e) {
             e.printStackTrace();
         }
