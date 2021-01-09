@@ -17,6 +17,7 @@ class Controller {
     private String apiDocSrc;
     private Gson gson;
     private CurrencyCache currencyCache;
+    private GeoDBAPIHandler geoDBAPIHandler;
 
     // Handles requests to the home URL
     Route homePageHandler = (request, response) -> {
@@ -80,21 +81,74 @@ class Controller {
             boolean hasCountry = !country.isEmpty();
             boolean hasPosition = !latString.isEmpty() && !lonString.isEmpty();
 
+            String currencyToConvert = "";
+
+            /* TODO: Get a currency from a call to the GeoDB Cities API
+             *   and set currencyToConvert below to the returned currency
+             */
+
+            // Placeholder, should be set using the value from GeoDB handler.
+            //currencyToConvert = "EUR";
+
             if (!hasCity && !hasCountry && !hasPosition) {
                 response.status(400);
                 response.body("{ \"fault\": \"You need to specify either " +
                         "a country, city, or position\" }");
                 return response.body();
             }
+            else if(hasPosition){
+                String countryFromCoords = GeocodeAPIHandler.getCountryFromCoords(lat,lon);
+                boolean isErrorCode = GeoDBAPIHandler.checkIfCode(countryFromCoords);
+                if(isErrorCode){
+                    response.status(404);
+                    response.body("{ \"fault\": \"Couldn't retrieve a country from your position\" }");
+                    return response.body();
+                }
+                else {
+                    String currency = geoDBAPIHandler.getCurrencyFromCountry(countryFromCoords);
+                    if(currency.equals("404")){
+                        response.status(404);
+                        response.body("{ \"fault\": \"Couldn't retrieve a currency from your country: "+countryFromCoords+"\" }");
+                        return response.body();
+                    }
+                    currencyToConvert = currency;
+                }
+            }
+            else if(hasCountry){
+                String currency = geoDBAPIHandler.getCurrencyFromCountry(country);
+                boolean isErrorCode = GeoDBAPIHandler.checkIfCode(currency);
+                if(currency.equals("404")){
+                    response.status(404);
+                    response.body("{ \"fault\": \"Couldn't retrieve a currency from your country: "+country+"\" }");
+                    return response.body();
+                }
+                else if(isErrorCode){
+                    response.status(500);
+                    response.body("{ \"fault\": \"Internal server error\" }");
+                    return response.body();
+                }
+                else {
+                    currencyToConvert = currency;
+                }
+            }
+            else {
+                String currency = geoDBAPIHandler.getCurrencyFromCity(city);
+                boolean isErrorCode = GeoDBAPIHandler.checkIfCode(currency);
+                if(currency.equals("404")){
+                    response.status(404);
+                    response.body("{ \"fault\": \"Couldn't retrieve a currency from your city: "+city+"\" }");
+                    return response.body();
+                }
+                else if(isErrorCode){
+                    response.status(500);
+                    response.body("{ \"fault\": \"Internal server error\" }");
+                    return response.body();
+                }
+                else {
+                    currencyToConvert = currency;
+                }
+            }
 
-            String currencyToConvert;
-
-            /* TODO: Get a currency from a call to the GeoDB Cities API
-            *   and set currencyToConvert below to the returned currency
-            */
-
-            // Placeholder, should be set using the value from GeoDB handler.
-            currencyToConvert = "EUR";
 
             CurrencyResponse currResponse = currencyCache.convertCurrency(
                     prefCurrency,
@@ -103,6 +157,7 @@ class Controller {
 
             response.status(200);
             response.body(gson.toJson(currResponse));
+            response.header("Access-Control-Allow-Origin", "*");
         }
 
         return response.body();
@@ -114,12 +169,13 @@ class Controller {
      */
     Controller() throws IOException {
         homePageSrc = new String(Files.readAllBytes(
-                Paths.get("../Frontend/index.html")));
+                Paths.get("../Webbgränssnitt/index.html")));
         apiDocSrc = new String(Files.readAllBytes(
-                Paths.get("../Frontend/api_doc.html")));
+                Paths.get("../Webbgränssnitt/api_doc.html")));
 
         gson = new GsonBuilder().setPrettyPrinting().create();
         currencyCache = new CurrencyCache(gson);
+        geoDBAPIHandler = new GeoDBAPIHandler(gson);
     }
 
     /**
