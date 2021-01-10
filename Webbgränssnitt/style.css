@@ -33,8 +33,18 @@ select{
     margin-bottom: 10px;
     border-radius: 11px;
 }
+#currency{
+    padding: 10px;
+    width: 3em;
+    margin-bottom: 10px;
+    border-radius: 11px;
+}
 #container{
     text-align: center;
+}
+#labelCurrency{
+    position: relative;
+    left: 185px;
 }
 #changeColor {
     padding: 0.5em 1em;

@@ -18,7 +18,7 @@ function getLocation() {
         else {
             $('#type').show();
             $('#location').show();
-            $('#titletext').text("Select your location, preffered currency and amount");
+            $('#titletext').text("Select your location, amount and preffered currency.");
         }
     }
     else {
@@ -46,9 +46,9 @@ function showPosition(position) {
     $('#type').hide();
     $('#location').hide();
     $('#location').val("");
-    $('#titletext').text("Select your preffered currency and amount.");
+    $('#titletext').text("Select your amount and preffered currency.");
     var amount = $('#toAmount').val();
-    var preffCurr = $('#toSelect').val();
+    var preffCurr = $('#currency').val();
     
     $.ajax({
         url: 'http://localhost:8192' + '/api/v1/conversion?preferredCurrency='+preffCurr+'&amount='+amount + '&lat=' + position.coords.latitude + '&lon=' + position.coords.longitude,
@@ -59,7 +59,6 @@ function showPosition(position) {
 
             //x.innerHTML = "Latitude: " + position.coords.latitude +
             //    "<br>Longitude: " + position.coords.longitude;
-            console.log(data.textStatus);
             var prefCurr = data['prefCurrency'];
             var convCurr = data['currencyConverted'];
             var amount = data['returnAmount'];
@@ -105,7 +104,7 @@ function showPosition(position) {
 
 function getAmountWithCountry(country){
     var amount = $('#toAmount').val();
-    var preffCurr = $('#toSelect').val();
+    var preffCurr = $('#currency').val();
     $.ajax({
         url: 'http://localhost:8192' + '/api/v1/conversion?preferredCurrency='+preffCurr+'&amount='+amount + '&country='+country,
         method: "GET",
@@ -132,7 +131,7 @@ function getAmountWithCountry(country){
 
 function getAmountWithCity(city){
     var amount = $('#toAmount').val();
-    var preffCurr = $('#toSelect').val();
+    var preffCurr = $('#currency').val();
     $.ajax({
         url: 'http://localhost:8192' + '/api/v1/conversion?preferredCurrency='+preffCurr+'&amount='+amount + '&city='+city,
         method: "GET",
@@ -160,7 +159,7 @@ function getAmountWithCity(city){
 function failedToRetrieve(position) {
     $('#type').show();
     $('#location').show();
-    $('#titletext').text("Select your location, preffered currency and amount");
+    $('#titletext').text("Select your location, amount and preffered currency.");
 }
 
 $(document).ready(function(){

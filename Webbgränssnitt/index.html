@@ -17,7 +17,7 @@
         <section id="container">
             <header>
                 <h1>CONVERT CURRENCY</h1>
-                <h4 id = "titletext">Select your preffered currency and amount.</h4>
+                <h4 id = "titletext">Select your amount and preffered currency.</h4>
             </header>
 
             <!--<button id="getCountry" type="btn" onclick="getLocation()">Get location</button>-->
@@ -32,9 +32,11 @@
             </section>
 
             
-            
+            <label id ="labelAmount">Amount</label>
+            <label id ="labelCurrency">Currency</label>
             <section id="box2">
                 <input id="toAmount" type="text" />
+                <!-- 
                 <select id="toSelect">
                     <option value="AUD">(AFN)</option>
                     <option value="ALL">(ALL)</option>
@@ -45,6 +47,8 @@
                     <option value="GBP">(GBP)</option>
                     <option value="PLN">(PLN)</option>
                 </select>
+                -->
+                <input id="currency" type="text" value="EUR"/>
             </section>
             <button id="changeColor" type="btn" onclick="getLocation()">Get amount</button>
             <p id="outcome"></p>
