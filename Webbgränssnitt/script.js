@@ -59,6 +59,7 @@ function showPosition(position) {
 
             //x.innerHTML = "Latitude: " + position.coords.latitude +
             //    "<br>Longitude: " + position.coords.longitude;
+            console.log(data.textStatus);
             var prefCurr = data['prefCurrency'];
             var convCurr = data['currencyConverted'];
             var amount = data['returnAmount'];
