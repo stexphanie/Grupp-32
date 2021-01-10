@@ -16,7 +16,7 @@ import java.nio.file.Path;
 
 /**
  * Class to retrieve currency using country or city.
- * Author: Robert L
+ * @author Robert L
  */
 public class GeoDBAPIHandler {
 
@@ -94,6 +94,11 @@ public class GeoDBAPIHandler {
         }
     }
 
+    /**
+     * Method to retrieve currency from a country that city is in.
+     * @param city, a city
+     * @return Returns a currency in String format from the given city.
+     */
     public String getCurrencyFromCity(String city){
         String res = null;
         city = city.replaceAll(" ", "%20");
@@ -105,7 +110,6 @@ public class GeoDBAPIHandler {
                 .build();
         try {
             HttpResponse<String> response = HttpClient.newHttpClient().send(request,HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
             if(response.statusCode() == 200){
                 //OKAY BOSS
                 res = response.body();
@@ -157,6 +161,11 @@ public class GeoDBAPIHandler {
         }
     }
 
+    /**
+     * Method to check if value retrieved is an error code, or not.
+     * @param codes input error codes
+     * @return returns true if input codes is one of the given cases, otherwise returns false.
+     */
     public static boolean checkIfCode(String codes){
         switch (codes){
             case "400":

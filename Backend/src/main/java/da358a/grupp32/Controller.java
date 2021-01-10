@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 
 /**
  * The controller handles all requests made to the website and its API
- * @author Kasper S. Skott
+ * @author Kasper S. Skott, Robert L
  */
 class Controller {
 
@@ -82,13 +82,6 @@ class Controller {
             boolean hasPosition = !latString.isEmpty() && !lonString.isEmpty();
 
             String currencyToConvert = "";
-
-            /* TODO: Get a currency from a call to the GeoDB Cities API
-             *   and set currencyToConvert below to the returned currency
-             */
-
-            // Placeholder, should be set using the value from GeoDB handler.
-            //currencyToConvert = "EUR";
 
             if (!hasCity && !hasCountry && !hasPosition) {
                 response.status(400);

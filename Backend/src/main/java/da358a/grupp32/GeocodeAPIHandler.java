@@ -12,7 +12,7 @@ import java.net.http.HttpResponse;
 
 /**
  * Class to retrieve country using coordinates.
- * Author Robert L.
+ * @author Robert L.
  */
 public class GeocodeAPIHandler {
 
