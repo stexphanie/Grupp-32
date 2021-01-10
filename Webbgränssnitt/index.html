@@ -10,51 +10,36 @@
             @import url("https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap");
         </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script type ="text/javascript" src = "script.js"></script>
+        <script type="text/javascript" src="script.js"></script>
         <script src="style.js" defer></script>
     </head>
     <body>
         <section id="container">
             <header>
                 <h1>CONVERT CURRENCY</h1>
-                <h4 id = "titletext">Select your amount and preffered currency.</h4>
+                <h4 id="titletext">Select your amount and preffered currency.</h4>
             </header>
 
             <!--<button id="getCountry" type="btn" onclick="getLocation()">Get location</button>-->
             <section id="boxes">
+                <section id="box">
+                    <input id="location" type="text" placeholder="Enter your Country/City..." />
+                    <select id="type">
+                        <option value="Country" selected>Country</option>
+                        <option value="City">City</option>
+                    </select>
+                </section>
 
-            <section id="box">
-                <input id="location" type="text" />
-                <select id="type">
-                    <option value="Country" selected>Country</option>
-                    <option value="City">City</option>
-                </select>
+                <section id="box2">
+                    <input id="toAmount" type="text" placeholder="Write your amount... " />
+
+                    <input id="currency" type="text" value="EUR" />
+                </section>
+                <button id="changeColor" type="btn" onclick="getLocation()">Get amount</button>
+                <p id="outcome"></p>
             </section>
 
-            
-            <label id ="labelAmount">Amount</label>
-            <label id ="labelCurrency">Currency</label>
-            <section id="box2">
-                <input id="toAmount" type="text" />
-                <!-- 
-                <select id="toSelect">
-                    <option value="AUD">(AFN)</option>
-                    <option value="ALL">(ALL)</option>
-                    <option value="USD">(USD)</option>
-                    <option value="EUR" selected>(EUR)</option>
-                    <option value="AUD">(AUD)</option>
-                    <option value="SEK">(SEK)</option>
-                    <option value="GBP">(GBP)</option>
-                    <option value="PLN">(PLN)</option>
-                </select>
-                -->
-                <input id="currency" type="text" value="EUR"/>
-            </section>
-            <button id="changeColor" type="btn" onclick="getLocation()">Get amount</button>
-            <p id="outcome"></p>
-        </section>
-
-           
+            <a href="api_doc.html" target="_blank">API Documentation</a>
         </section>
     </body>
 </html>
