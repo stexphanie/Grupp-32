@@ -18,7 +18,7 @@ function getLocation() {
         else {
             $('#type').show();
             $('#location').show();
-            $('#titletext').text("Select your location, amount and preffered currency.");
+            $('#titletext').text("Select your location, amount and preferred currency.");
         }
     }
     else {
@@ -46,7 +46,7 @@ function showPosition(position) {
     $('#type').hide();
     $('#location').hide();
     $('#location').val("");
-    $('#titletext').text("Select your amount and preffered currency.");
+    $('#titletext').text("Select your amount and preferred currency.");
     var amount = $('#toAmount').val();
     var preffCurr = $('#currency').val();
     
@@ -159,7 +159,7 @@ function getAmountWithCity(city){
 function failedToRetrieve(position) {
     $('#type').show();
     $('#location').show();
-    $('#titletext').text("Select your location, amount and preffered currency.");
+    $('#titletext').text("Select your location, amount and preferred currency.");
 }
 
 $(document).ready(function(){
