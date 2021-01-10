@@ -9,50 +9,40 @@
         <style>
             @import url("https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap");
         </style>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script type="text/javascript" src="script.js"></script>
         <script src="style.js" defer></script>
     </head>
     <body>
         <section id="container">
             <header>
                 <h1>CONVERT CURRENCY</h1>
-                <h4>Select your base currency and provide an amount.</h4>
+
+                <h4 id="titletext">Select your amount and preferred currency.</h4>
             </header>
 
+            <!--<button id="getCountry" type="btn" onclick="getLocation()">Get location</button>-->
             <section id="boxes">
+                <section id="box">
+                    <input id="location" type="text" placeholder="Enter your Country/City..." />
+                    <select id="type">
+                        <option value="Country" selected>Country</option>
+                        <option value="City">City</option>
+                    </select>
+                </section>
 
-            <section id="box">
-                <input id="fromAmount" type="text" />
-                <select id="from">
-                    <option value="AUD">(AFN)</option>
-                    <option value="ALL">(ALL)</option>
-                    <option value="USD">(USD)</option>
-                    <option value="EUR">(EUR)</option>
-                    <option value="AUD">(AUD)</option>
-                    <option value="SEK" selected>(SEK)</option>
-                    <option value="GBP">(GBP)</option>
-                    <option value="PLN">(PLN)</option>
-                </select>
+                <section id="box2">
+                    <input id="toAmount" type="text" placeholder="Write your amount... " />
+
+                    <input id="currency" type="text" value="EUR" />
+                </section>
+                <button id="changeColor" type="btn" onclick="getLocation()">Get amount</button>
+                <p id="outcome"></p>
             </section>
 
-            <button id="changeColor" type="btn" onclick="myFunction()">Click Me!</button>
-            
-            <section id="box2">
-                <input id="toAmount" type="text" />
-                <select id="to">
-                    <option value="AUD">(AFN)</option>
-                    <option value="ALL">(ALL)</option>
-                    <option value="USD">(USD)</option>
-                    <option value="EUR" selected>(EUR)</option>
-                    <option value="AUD">(AUD)</option>
-                    <option value="SEK">(SEK)</option>
-                    <option value="GBP">(GBP)</option>
-                    <option value="PLN">(PLN)</option>
-                </select>
-            </section>
-        </section>
+            <a href="api_doc.html" target="_blank">API Documentation</a>
 
-           
         </section>
     </body>
 </html>
