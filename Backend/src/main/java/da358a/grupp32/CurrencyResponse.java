@@ -1,7 +1,14 @@
 package da358a.grupp32;
 
+import java.util.List;
+
 class CurrencyResponse {
     String prefCurrency;
-    String currencyConverted;
-    double returnAmount;
+    double convertedAmount;
+    String originalCurrency;
+    double originalAmount;
+    Boolean bmiDataAvailable;
+    Double bmiAdjustedAmount;
+    String bmiLatestUpdate;
+    List<BMIAdjustedCityPrice> cityComparison;
 }

@@ -18,6 +18,7 @@ class Controller {
     private Gson gson;
     private CurrencyCache currencyCache;
     private GeoDBAPIHandler geoDBAPIHandler;
+    private BigMacIndex bigMacIndex;
 
     // Handles requests to the home URL
     Route homePageHandler = (request, response) -> {
@@ -148,6 +149,10 @@ class Controller {
                     currencyToConvert,
                     amount);
 
+            String includeBMI = request.queryParamOrDefault("includeBMI", "false");
+            if (includeBMI.equals("true"))
+                currResponse = bigMacIndex.appendResponse(currResponse);
+
             response.status(200);
             response.body(gson.toJson(currResponse));
             response.header("Access-Control-Allow-Origin", "*");
@@ -169,6 +174,8 @@ class Controller {
         gson = new GsonBuilder().setPrettyPrinting().create();
         currencyCache = new CurrencyCache(gson);
         geoDBAPIHandler = new GeoDBAPIHandler(gson);
+
+        bigMacIndex = new BigMacIndex();
     }
 
     /**

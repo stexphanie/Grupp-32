@@ -191,10 +191,10 @@ class CurrencyCache {
                                      String currencyToConvert, double amount) {
         CurrencyResponse res = new CurrencyResponse();
         res.prefCurrency = prefCurrency;
-        res.currencyConverted = currencyToConvert;
+        res.originalCurrency = currencyToConvert;
 
         double conversionRate = getConversionRate(prefCurrency, currencyToConvert);
-        res.returnAmount = amount * conversionRate;
+        res.convertedAmount = amount * conversionRate;
 
         return res;
     }
