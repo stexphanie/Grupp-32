@@ -6,6 +6,8 @@ class BMIAdjustedCityPrice {
     double prefCurrencyAmount;
     double dollarAmount;
 
+
+
     @Override
     public String toString() {
         return "BMIAdjustedCityPrice{" +
@@ -14,5 +16,11 @@ class BMIAdjustedCityPrice {
                 ", prefCurrencyAmount=" + prefCurrencyAmount +
                 ", dollarAmount=" + dollarAmount +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        BMIAdjustedCityPrice other = (BMIAdjustedCityPrice) obj;
+        return this.country.equals(other.country);
     }
 }

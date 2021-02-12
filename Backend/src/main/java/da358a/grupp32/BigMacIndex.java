@@ -104,8 +104,7 @@ class BigMacIndex {
         BMIData otherBMIData = bmiTable.get(otherCurrency);
         BMIData localBMIData = bmiTable.get(localCurrency);
 
-        if (    otherBMIData == null ||
-                prefBMIData == null ||
+        if (otherBMIData == null || prefBMIData == null ||
                 localBMIData == null) {
             ret.country = "No BMI data";
             return ret;
@@ -135,26 +134,10 @@ class BigMacIndex {
         response.bmiDataAvailable = true;
         response.bmiAdjustedAmount = e.prefCurrencyAmount;
 
-        response.cityComparison = new ArrayList<>(3);
+        response.cityComparison = new ArrayList<>(10);
 
         e = getAdjustedPrice(response.originalCurrency,
-                prefCurrency, prefAmount, "GBP", "London");
-        response.cityComparison.add(e);
-
-        e = getAdjustedPrice(response.originalCurrency,
-                prefCurrency, prefAmount, "CAD", "Ottawa");
-        response.cityComparison.add(e);
-
-        e = getAdjustedPrice(response.originalCurrency,
-                prefCurrency, prefAmount, "AUD", "Canberra");
-        response.cityComparison.add(e);
-
-        e = getAdjustedPrice(response.originalCurrency,
-                prefCurrency, prefAmount, "SEK", "Stockholm");
-        response.cityComparison.add(e);
-
-        e = getAdjustedPrice(response.originalCurrency,
-                prefCurrency, prefAmount, "JPY", "Tokyo");
+                prefCurrency, prefAmount, "USD", "Washington, D.C.");
         response.cityComparison.add(e);
 
         e = getAdjustedPrice(response.originalCurrency,
@@ -162,14 +145,46 @@ class BigMacIndex {
         response.cityComparison.add(e);
 
         e = getAdjustedPrice(response.originalCurrency,
-                prefCurrency, prefAmount, "USD", "Washington D.C.");
+                prefCurrency, prefAmount, "GBP", "London");
         response.cityComparison.add(e);
 
         e = getAdjustedPrice(response.originalCurrency,
-                prefCurrency, prefAmount, "INR", "New Delhi");
+                prefCurrency, prefAmount, "MXN", "Mexico City");
         response.cityComparison.add(e);
 
-        // TODO check and exclude prefCurrency and currencyConverted from list
+        e = getAdjustedPrice(response.originalCurrency,
+                prefCurrency, prefAmount, "THB", "Bangkok");
+        response.cityComparison.add(e);
+
+        e = getAdjustedPrice(response.originalCurrency,
+                prefCurrency, prefAmount, "TRY", "Ankara");
+        response.cityComparison.add(e);
+
+        e = getAdjustedPrice(response.originalCurrency,
+                prefCurrency, prefAmount, "MYR", "Kuala Lumpur");
+        response.cityComparison.add(e);
+
+        e = getAdjustedPrice(response.originalCurrency,
+                prefCurrency, prefAmount, "HKD", "Hong Kong");
+        response.cityComparison.add(e);
+
+        e = getAdjustedPrice(response.originalCurrency,
+                prefCurrency, prefAmount, "RUB", "Moscow");
+        response.cityComparison.add(e);
+
+        e = getAdjustedPrice(response.originalCurrency,
+                prefCurrency, prefAmount, "JPY", "Tokyo");
+        response.cityComparison.add(e);
+
+        // If the list contains the preferred currency, remove it from the list.
+        e = new BMIAdjustedCityPrice();
+        e.country = bmiTable.get(prefCurrency).countryName;
+        response.cityComparison.remove(e);
+
+        // If the list contains the currency converted from, remove it from the list.
+        e = new BMIAdjustedCityPrice();
+        e.country = bmiTable.get(response.originalCurrency).countryName;
+        response.cityComparison.remove(e);
 
         return response;
     }
@@ -179,12 +194,11 @@ class BigMacIndex {
 
         CurrencyResponse response = new CurrencyResponse();
         response.prefCurrency = "SEK";
-        response.convertedAmount = 31.03;
-        response.originalCurrency = "JPY";
-        response.originalAmount = 390;
+        response.convertedAmount = 137.6576501825;
+        response.originalCurrency = "THB";
+        response.originalAmount = 500;
 
-        CurrencyResponse temp;
-        temp = bmi.appendResponse(response);
+        bmi.appendResponse(response);
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         System.out.println(gson.toJson(response));
