@@ -66,6 +66,10 @@ function showPosition(position) {
             var bmiExist = data["bmiDataAvailable"];
             $("#bmiCustom").html("BMI in " +preffCurr);
             if(bmiExist != null && bmiExist == true){
+                var adjustedAmount = Math.round(data['bmiAdjustedAmount']*100)/100;
+                var adjustedAmountCountry = data['bmiAdjustedAmountCountry'];
+                //$("#outcome").html("Amount: " + convAmount+ " " + preffCurr + " from " + amount +  " " + convCurr + "<br>What the same product might cost in " +adjustedAmountCountry + ": " + adjustedAmount+ " " +preffCurr);
+                $("#outcome").append("<br>What the same product might cost in " +adjustedAmountCountry + ": " + adjustedAmount+ " " +preffCurr);
                 $("#tableBMI tbody").empty();
                 var bmiString = "";
                 
@@ -145,6 +149,9 @@ function getAmountWithCountry(country){
             var bmiExist = data["bmiDataAvailable"];
             $("#bmiCustom").html("BMI in " +preffCurr);
             if(bmiExist != null && bmiExist == true){
+                var adjustedAmount = Math.round(data['bmiAdjustedAmount']*100)/100;
+                var adjustedAmountCountry = data['bmiAdjustedAmountCountry'];
+                $("#outcome").append("<br>What the same product might cost in " +adjustedAmountCountry + ": " + adjustedAmount+ " " +preffCurr);                
                 $("#tableBMI tbody").empty();
                 var bmiString = "";
                 
@@ -196,6 +203,9 @@ function getAmountWithCity(city){
             var bmiExist = data["bmiDataAvailable"];
             $("#bmiCustom").html("BMI in " +preffCurr);
             if(bmiExist != null && bmiExist == true){
+                var adjustedAmount = Math.round(data['bmiAdjustedAmount']*100)/100;
+                var adjustedAmountCountry = data['bmiAdjustedAmountCountry'];
+                $("#outcome").append("<br>What the same product might cost in " +adjustedAmountCountry + ": " + adjustedAmount+ " " +preffCurr);
                 $("#tableBMI tbody").empty();
                 var bmiString = "";
                 
