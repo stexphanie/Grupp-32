@@ -51,7 +51,7 @@ function showPosition(position) {
     var preffCurr = $('#currency').val();
     
     $.ajax({
-        url: 'http://localhost:8192' + '/api/v1/conversion?preferredCurrency='+preffCurr+'&amount='+amount + '&lat=' + position.coords.latitude + '&lon=' + position.coords.longitude,
+        url: 'http://localhost:8192' + '/api/v1/conversion?preferredCurrency='+preffCurr+'&amount='+amount + '&lat=' + position.coords.latitude + '&lon=' + position.coords.longitude + '&includeBMI=true',
         method: "GET",
         headers: { "Accept": "application/json" }
     })
@@ -60,10 +60,24 @@ function showPosition(position) {
             //x.innerHTML = "Latitude: " + position.coords.latitude +
             //    "<br>Longitude: " + position.coords.longitude;
             var prefCurr = data['prefCurrency'];
-            var convCurr = data['currencyConverted'];
-            var amount = data['returnAmount'];
-            $("#outcome").text("Amount: " + amount+ " " + preffCurr);
+            var convCurr = data['originalCurrency'];
+            var convAmount = Math.round(data['convertedAmount']*100)/100;
+            $("#outcome").text("Amount: " + convAmount+ " " + preffCurr + " from " + amount +  " " + convCurr);
+            var bmiExist = data["bmiDataAvailable"];
+            if(bmiExist != null && bmiExist == true){
+                var bmiString = "";
+                for (i = 0; i < data.cityComparison.length; i++){
+                    var bmiCity = data.cityComparison[i].city;
+                    var bmiCountry = data.cityComparison[i].country;
+                    var prefCurrencyAmount = Math.round(data.cityComparison[i].prefCurrencyAmount*100)/100;
+                    var dollarAmount = Math.round(data.cityComparison[i].dollarAmount*100)/100;
+                    bmiString = bmiString + bmiCity+", "+bmiCountry+" "+prefCurrencyAmount+" " +preffCurr + " "+dollarAmount + " $" + "<br>\n";
+                }
+                console.log(bmiString);
+                $("#bigmac").html(bmiString);
+            }
             console.log(prefCurr + "\n" + convCurr + "\n" + amount);
+			console.log(data);
 
         })
         .fail(function (jqXHR, textStatus, error) {
@@ -106,7 +120,7 @@ function getAmountWithCountry(country){
     var amount = $('#toAmount').val();
     var preffCurr = $('#currency').val();
     $.ajax({
-        url: 'http://localhost:8192' + '/api/v1/conversion?preferredCurrency='+preffCurr+'&amount='+amount + '&country='+country,
+        url: 'http://localhost:8192' + '/api/v1/conversion?preferredCurrency='+preffCurr+'&amount='+amount + '&country='+country + '&includeBMI=true',
         method: "GET",
         headers: { "Accept": "application/json" }
     })
@@ -115,10 +129,11 @@ function getAmountWithCountry(country){
             //x.innerHTML = "Latitude: " + position.coords.latitude +
             //    "<br>Longitude: " + position.coords.longitude;
             var prefCurr = data['prefCurrency'];
-            var convCurr = data['currencyConverted'];
-            var amount = data['returnAmount'];
-            $("#outcome").text("Amount: " + amount+ " " + preffCurr);
+            var convCurr = data['originalCurrency'];
+            var convAmount = Math.round(data['convertedAmount']*100)/100;
+            $("#outcome").text("Amount: " + convAmount+ " " + preffCurr + " from " + amount +  " " + convCurr);
             console.log(prefCurr + "\n" + convCurr + "\n" + amount);
+			console.log(data);
 
         })
         .fail(function (jqXHR, textStatus, error) {
@@ -133,7 +148,7 @@ function getAmountWithCity(city){
     var amount = $('#toAmount').val();
     var preffCurr = $('#currency').val();
     $.ajax({
-        url: 'http://localhost:8192' + '/api/v1/conversion?preferredCurrency='+preffCurr+'&amount='+amount + '&city='+city,
+        url: 'http://localhost:8192' + '/api/v1/conversion?preferredCurrency='+preffCurr+'&amount='+amount + '&city='+city + '&includeBMI=true',
         method: "GET",
         headers: { "Accept": "application/json" }
     })
@@ -142,10 +157,11 @@ function getAmountWithCity(city){
             //x.innerHTML = "Latitude: " + position.coords.latitude +
             //    "<br>Longitude: " + position.coords.longitude;
             var prefCurr = data['prefCurrency'];
-            var convCurr = data['currencyConverted'];
-            var amount = data['returnAmount'];
-            $("#outcome").text("Amount: " + amount+ " " + preffCurr);
+            var convCurr = data['originalCurrency'];
+            var convAmount = Math.round(data['convertedAmount']*100)/100;
+            $("#outcome").text("Amount: " + convAmount+ " " + preffCurr + " from " + amount +  " " + convCurr);
             console.log(prefCurr + "\n" + convCurr + "\n" + amount);
+			console.log(data);
 
         })
         .fail(function (jqXHR, textStatus, error) {
