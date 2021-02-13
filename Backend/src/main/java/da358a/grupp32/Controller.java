@@ -94,15 +94,15 @@ class Controller {
                 String countryFromCoords = GeocodeAPIHandler.getCountryFromCoords(lat,lon);
                 boolean isErrorCode = GeoDBAPIHandler.checkIfCode(countryFromCoords);
                 if(isErrorCode){
-                    response.status(404);
-                    response.body("{ \"fault\": \"Couldn't retrieve a country from your position\" }");
+                    response.status(204);
+                    response.body("{ \"fault\": \"Couldn't identify a country based on your position\" }");
                     return response.body();
                 }
                 else {
                     String currency = geoDBAPIHandler.getCurrencyFromCountry(countryFromCoords);
                     if(currency.equals("404")){
-                        response.status(404);
-                        response.body("{ \"fault\": \"Couldn't retrieve a currency from your country: "+countryFromCoords+"\" }");
+                        response.status(204);
+                        response.body("{ \"fault\": \"Couldn't retrieve a currency from the country "+countryFromCoords+"\" }");
                         return response.body();
                     }
                     currencyToConvert = currency;
@@ -112,8 +112,8 @@ class Controller {
                 String currency = geoDBAPIHandler.getCurrencyFromCountry(country);
                 boolean isErrorCode = GeoDBAPIHandler.checkIfCode(currency);
                 if(currency.equals("404")){
-                    response.status(404);
-                    response.body("{ \"fault\": \"Couldn't retrieve a currency from your country: "+country+"\" }");
+                    response.status(204);
+                    response.body("{ \"fault\": \"Couldn't retrieve a currency from the country "+country+"\" }");
                     return response.body();
                 }
                 else if(isErrorCode){
@@ -129,8 +129,8 @@ class Controller {
                 String currency = geoDBAPIHandler.getCurrencyFromCity(city);
                 boolean isErrorCode = GeoDBAPIHandler.checkIfCode(currency);
                 if(currency.equals("404")){
-                    response.status(404);
-                    response.body("{ \"fault\": \"Couldn't retrieve a currency from your city: "+city+"\" }");
+                    response.status(204);
+                    response.body("{ \"fault\": \"Couldn't retrieve a currency from the city "+city+"\" }");
                     return response.body();
                 }
                 else if(isErrorCode){
@@ -143,7 +143,7 @@ class Controller {
                 }
             }
 
-
+            prefCurrency = prefCurrency.toUpperCase();
             CurrencyResponse currResponse = currencyCache.convertCurrency(
                     prefCurrency,
                     currencyToConvert,

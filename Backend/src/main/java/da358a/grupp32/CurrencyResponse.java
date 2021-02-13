@@ -9,6 +9,7 @@ class CurrencyResponse {
     double originalAmount;
     Boolean bmiDataAvailable;
     Double bmiAdjustedAmount;
+    String bmiAdjustedAmountCountry;
     String bmiLatestUpdate;
     List<BMIAdjustedCityPrice> cityComparison;
 }
