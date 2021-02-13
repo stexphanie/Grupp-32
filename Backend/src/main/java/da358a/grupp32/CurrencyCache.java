@@ -192,6 +192,7 @@ class CurrencyCache {
         CurrencyResponse res = new CurrencyResponse();
         res.prefCurrency = prefCurrency;
         res.originalCurrency = currencyToConvert;
+        res.originalAmount = amount;
 
         double conversionRate = getConversionRate(prefCurrency, currencyToConvert);
         res.convertedAmount = amount * conversionRate;

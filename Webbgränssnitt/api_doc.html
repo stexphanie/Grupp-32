@@ -5,21 +5,44 @@
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap");
 
+        body {
+            background-color: rgb(239, 240, 241);
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+        table {
+            width: fit-content;
+            max-width: inherit;
+        }
+
         .example {
             font-family: 'Lucida Console';
             width: fit-content;
             max-width: inherit;
-            background-color: rgb(239, 240, 241);
+            background-color: rgb(229, 230, 231);
             margin-left: 20px;
             padding: 10px;
             white-space: pre-wrap;
         }
 
+        .reqExampleDiv {
+            margin-left: 40px;
+            border: 1px solid black;
+            padding: 5px;
+            padding-bottom: 15px;
+        }
+
         #main-content {
-            width: 75%;
+            width: 60%;
+            min-width: 600px;
             background-color: rgb(253, 254, 255);
-            margin-left: 10%;
-            margin-right: 10%;
+            margin-left: 20%;
+            margin-right: 20%;
             margin-top: 50px;
             margin-bottom: 50px;
             padding-left: 40px;
@@ -35,54 +58,294 @@
     <a href="index.html">[Back]</a>
     <div id="main-content">
         <h1>API Documentation</h1>
-        <h2>GET /api/v1/conversion</h2>
+        
+        <h2>1. GET /api/v1/conversion</h2>
         <p>
-            Converts an amount in the local currency into you preferred currency. 
-        </p>
-        <p>
-            A request must be made with the header "Accept: application/json".
+            Converts an amount in the local currency into your preferred currency.<br>
+            The data is only available in JSON.
         </p>
         <br>
         
-        <h3>Parameters</h3>
+        <h3 id="Parameters">1.1 Parameters</h3>
         <ul>
-            <li>preferredCurrency</li>
-            <li>amount</li>
+            <li>preferredCurrency: currency code of the preferred currency.</li>
+            <li>amount: the amount in the local currency</li>
+            <li>includeBMI: (optional) whether to include Big Mac Index (BMI) price estimates.</li>
         </ul>
-        <p>You must provide a way to find the local currency, either by country, city, or position (lat, lon).</p>
+        <p>You must also provide a way to find the local currency, either by 
+            specifying the country, city, or a position (lat, lon).</p>
         <ul>
-            <li>country</li>
-            <li>city</li>
-            <li>lat</li>
-            <li>lon</li>
+            <li>country: name of the country</li>
+            <li>city: name of the city</li>
+            <li>lat: latitude</li>
+            <li>lon: longitude</li>
         </ul>
         <br>
 
-        <h3>Response</h3>
-        <p>A successful API call will return a JSON object with the follow data</p>
+
+        <h3>1.2 Response</h3>
+        <p>A successful API call will always return a JSON object with atleast the following data:</p>
         <ul>
             <li>prefCurrency</li>
-            <li>currencyConverted</li>
-            <li>returnAmount</li>
+            <li>convertedAmount</li>
+            <li>originalCurrency</li>
+            <li>originalAmount</li>
         </ul>
+        <p>For example:</p>
+<div class="example">{
+    "prefCurrency": "SEK",
+    "convertedAmount": 323.3988265772,
+    "originalCurrency": "AUD",
+    "originalAmount": 29.99
+}</div>        
+        <p>If you also wish to receive price estimates based on Big Mac Index,
+            the boolean field "bmiDataAvailable" will indicate if there was
+            BMI data available. The availability depends on which currencies
+            are involved. In the case of Euro, which is used in various european
+            countries, no accurate estimations can be made. This is due to how
+            Big Mac Index works.</p>
+        <br>
+
+        <p>If you want BMI data, you can always expect there to be a field
+            called "bmiDataAvailable". If this is false, no additional fields 
+            are returned. It looks like this:</p>
+<div class="example">{
+    "prefCurrency": "SEK",
+    "convertedAmount": 323.3988265772,
+    "originalCurrency": "AUD",
+    "originalAmount": 29.99,
+    "bmiDataAvailable": false
+}</div>        
+
+        <p>However, if "bmiDataAvailable" is true you can always expect the 
+            following additional fields to be included:</p>
+        <ul>
+            <li>bmiAdjustedAmount: the BMI-adjusted price in the preferred currency.</li>
+            <li>bmiLatestUpdate: the date of when the BMI data was last updated (YYYY-MM-DD)</li>
+        </ul>
+        <p>Additionally, there will be an array called "cityComparison" that
+            contains information about cities where an estimated price is
+            given. This estimation is roughly based on Big Mac Index and is not
+            100% accurate, although it does a decent job of showing how 
+            countries relate, in regards to how much that same product might 
+            have cost in the given city. However, of course, this feature only
+            makes sense if you use this API to convert prices of products.
+        </p>
+
+        <p><a href="#BMIExample">See example of receiving BMI data</a>.</p>
+
+        <p>The same cities will always be returned. They are the capitals of
+            the most visited countries in the world (that have BMI data), 
+            the first one being the most visited. If the preferred currency or
+            the currency to convert from happen to be on this list, they are 
+            not included.</p>
+        <ul>
+            <li>Washington, D.C., United States of America</li>
+            <li>Beijing, China</li>
+            <li>London, United Kingdom</li>
+            <li>Mexico City, Mexico</li>
+            <li>Ankara, Turkey</li>
+            <li>Kuala Lumpur, Malaysia</li>
+            <li>Hong Kong</li>
+            <li>Moscow, Russia</li>
+            <li>Tokyo, Japan</li>
+        </ul>
+        <br>
+
+        <h3>1.3 Examples</h3>
+        <p><b>Convert using position:</b></p>
+        <div class="reqExampleDiv">
+            <p class="example">/api/v1/conversion?preferredCurrency=USD&amount=199.99&lat=55.604980&lon=13.003822</p>
+            <p>Response example:</p>
 <div class="example">{
     "prefCurrency": "USD",
     "currencyConverted": "SEK",
     "returnAmount": 24.4141
-}</div>
-        <p>
-            If something isn't right, the response will contain a single 'fault' field that 
-            gives information about what was wrong
-        </p>
-<div class="example">{
-    "fault": "Something went wrong"
-}</div>
+}</div>        
+        </div>
         <br>
 
-        <h3>Examples</h3>
-        <p>By position:</p>
-        <p class="example">/api/v1/conversion?preferredCurrency=USD&amount=199.99&lat=55.604980&lon=13.003822</p>
+        <p><b>Convert using country:</b></p>
+        <div class="reqExampleDiv">
+            <p class="example">/api/v1/conversion?preferredCurrency=SEK&amount=29.99&country=Australia</p>
+            <p>Response example:</p>
+<div class="example">{
+    "prefCurrency": "SEK",
+    "convertedAmount": 323.3988265772,
+    "originalCurrency": "AUD",
+    "originalAmount": 29.99
+}</div>        
+        </div>
         <br>
+
+        <p><b>Convert using city:</b></p>
+        <div class="reqExampleDiv">
+            <p class="example">/api/v1/conversion?preferredCurrency=GBP&amount=8500&city=Seoul</p>
+            <p>Response example:</p>
+<div class="example">{
+    "prefCurrency": "GBP",
+    "convertedAmount": 5.742620295042,
+    "originalCurrency": "KRW",
+    "originalAmount": 8500.0
+}</div>        
+        </div>
+        <br>
+
+        <p><b>Convert using country, and including Big Mac Index (BMI) estimates:</b></p>
+        <div class="reqExampleDiv">
+            <p class="example">/api/v1/conversion?preferredCurrency=SEK&amount=500&country=Thailand&includeBMI=true</p>
+            <p>Response example:</p>
+<div class="example" id="BMIExample">{
+    "prefCurrency": "SEK",
+    "convertedAmount": 137.6576501825,
+    "originalCurrency": "THB",
+    "originalAmount": 500.0,
+    "bmiDataAvailable": true,
+    "bmiAdjustedAmount": 189.37562935606522,
+    "bmiLatestUpdate": "2021-01-01",
+    "cityComparison": [
+      {
+        "city": "Washington, D.C.",
+        "country": "United States",
+        "prefCurrencyAmount": 171.99222129101915,
+        "dollarAmount": 20.733820112837968
+      },
+      {
+        "city": "Beijing",
+        "country": "China",
+        "prefCurrencyAmount": 118.47092690006313,
+        "dollarAmount": 14.281778957844928
+      },
+      {
+        "city": "London",
+        "country": "Britain",
+        "prefCurrencyAmount": 142.26505173410828,
+        "dollarAmount": 17.150182542311356
+      },
+      {
+        "city": "Mexico City",
+        "country": "Mexico",
+        "prefCurrencyAmount": 99.62697116658072,
+        "dollarAmount": 12.01012280119113
+      },
+      {
+        "city": "Ankara",
+        "country": "Turkey",
+        "prefCurrencyAmount": 83.13696125121903,
+        "dollarAmount": 10.022236973113413
+      },
+      {
+        "city": "Kuala Lumpur",
+        "country": "Malaysia",
+        "prefCurrencyAmount": 94.29686695151432,
+        "dollarAmount": 11.367573846660958
+      },
+      {
+        "city": "Hong Kong",
+        "country": "Hong Kong",
+        "prefCurrencyAmount": 98.6234468967503,
+        "dollarAmount": 11.88914702953501
+      },
+      {
+        "city": "Moscow",
+        "country": "Russia",
+        "prefCurrencyAmount": 78.32995610684614,
+        "dollarAmount": 9.44274809160015
+      },
+      {
+        "city": "Tokyo",
+        "country": "Japan",
+        "prefCurrencyAmount": 125.2808508545914,
+        "dollarAmount": 15.102721539988718
+      }
+    ]
+}</div>
+        </div>
+        <br>
+
+        <!-- ERROR CODES AND FAULT MESSAGES-->
+        <h3>1.4 Response Status Codes</h3>
+            <p>In the case that the service responds with the any of the status 
+                codes specified below, except for 200, it will return a single 
+                field labeled "fault". Like this:</p>
+<div class="example">{
+    "fault": "Some message"
+}</div>             
+            <br>
+
+            <h4>200 OK</h4>
+            <p>The API call was successful and will return the requested data in JSON.</p>             
+            <br>
+    
+            <h4>204 No content</h4>
+            <table style = "max-width: 75%;">
+                <tr>
+                    <th style="width: 40%">Message</th>
+                    <th>Reason</th>
+                </tr>
+                <tr>
+                    <td>Couldn't identify a country based on your position</td>
+                    <td>This happens when the service was unable to find out
+                        which country the given coordinates were located in.</td>
+                </tr>
+                <tr>
+                    <td>Couldn't retrieve a currency from the country "[country]"</td>
+                    <td>This happens when the service was able to find the 
+                        country, but was there wasn't any currency data on that
+                        specific country.</td>
+                </tr>
+                <tr>
+                    <td>Couldn't retrieve a currency from the city "[city]"</td>
+                    <td>This happens when the service either was unable to find
+                        the given city, or the city was found, but no there was
+                        no currency data on that city.</td>
+                </tr>
+            </table>
+            <br>
+
+            <h4>400 Bad request</h4>
+            <table style = "max-width: 75%;">
+                <tr>
+                    <th style="width: 40%">Message</th>
+                    <th>Reason</th>
+                </tr>
+                <tr>
+                    <td>API request may only accept JSON</td>
+                    <td>This happens if your request doesn't accept JSON.
+                        Make sure your request sent includes the header:<br>
+                        "Accept: application/json"</td>
+                </tr>
+                <tr>
+                    <td>Query parameter 'preferredCurrency' must be specified</td>
+                    <td>The query parameter 'preferredCurrency' was missing.</td>
+                </tr>
+                <tr>
+                    <td>Query parameter 'amount' must be specified</td>
+                    <td>The query parameter 'amount' was missing.</td>
+                </tr>
+                <tr>
+                    <td>You need to specify either a country, city, or position</td>
+                    <td>This happens when if don't specify the required query
+                        parameters. See the section on <a href="#Parameters">Parameters</a>.</td>
+                </tr>
+            </table>
+            <br>
+
+            <h4>500 Internal Server Error</h4>
+            <table style = "max-width: 75%;">
+                <tr>
+                    <th style="width: 40%">Message</th>
+                    <th>Reason</th>
+                </tr>
+                <tr>
+                    <td>Internal server error</td>
+                    <td>This message is shown if there was an internal error,
+                        i.e. not the user's fault. There is no defined reason
+                        or condition for when this happens.
+                    </td>
+                </tr>
+            </table>
+            <br>
 
 </body>
 </html>
