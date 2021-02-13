@@ -45,6 +45,7 @@ select {
     width: 3em;
     margin-bottom: 10px;
     border-radius: 11px;
+    text-transform: uppercase;
 }
 
 #labelCurrency {

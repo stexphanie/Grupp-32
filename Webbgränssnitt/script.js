@@ -48,7 +48,7 @@ function showPosition(position) {
     $('#location').val("");
     $('#titletext').text("Select your amount and preferred currency.");
     var amount = $('#toAmount').val();
-    var preffCurr = $('#currency').val();
+    var preffCurr = $('#currency').val().toUpperCase();
     
     $.ajax({
         url: 'http://localhost:8192' + '/api/v1/conversion?preferredCurrency='+preffCurr+'&amount='+amount + '&lat=' + position.coords.latitude + '&lon=' + position.coords.longitude + '&includeBMI=true',
@@ -64,17 +64,27 @@ function showPosition(position) {
             var convAmount = Math.round(data['convertedAmount']*100)/100;
             $("#outcome").text("Amount: " + convAmount+ " " + preffCurr + " from " + amount +  " " + convCurr);
             var bmiExist = data["bmiDataAvailable"];
+            $("#bmiCustom").html("BMI in " +preffCurr);
             if(bmiExist != null && bmiExist == true){
+                $("#tableBMI tbody").empty();
                 var bmiString = "";
+                
                 for (i = 0; i < data.cityComparison.length; i++){
                     var bmiCity = data.cityComparison[i].city;
                     var bmiCountry = data.cityComparison[i].country;
                     var prefCurrencyAmount = Math.round(data.cityComparison[i].prefCurrencyAmount*100)/100;
                     var dollarAmount = Math.round(data.cityComparison[i].dollarAmount*100)/100;
                     bmiString = bmiString + bmiCity+", "+bmiCountry+" "+prefCurrencyAmount+" " +preffCurr + " "+dollarAmount + " $" + "<br>\n";
+                    //$("#tableBMI").find(".table").append("<tr><td>"+bmiCity+"</td><td>"+bmiCountry+"</td><td>"+prefCurrencyAmount+"</td><td>"+dollarAmount+"</td></tr>");
+                    $("#tableBMI").append("<tr><td>"+bmiCity+"</td><td>"+bmiCountry+"</td><td>"+prefCurrencyAmount+"</td><td>"+dollarAmount+"</td></tr>");
                 }
+                $("#tableBMI").show();
                 console.log(bmiString);
-                $("#bigmac").html(bmiString);
+                //$("#bigmac").html(bmiString);
+            }
+            else {
+                $("#tableBMI").hide();
+                $("#tableBMI tbody").empty();
             }
             console.log(prefCurr + "\n" + convCurr + "\n" + amount);
 			console.log(data);
@@ -118,7 +128,7 @@ function showPosition(position) {
 
 function getAmountWithCountry(country){
     var amount = $('#toAmount').val();
-    var preffCurr = $('#currency').val();
+    var preffCurr = $('#currency').val().toUpperCase();
     $.ajax({
         url: 'http://localhost:8192' + '/api/v1/conversion?preferredCurrency='+preffCurr+'&amount='+amount + '&country='+country + '&includeBMI=true',
         method: "GET",
@@ -132,6 +142,29 @@ function getAmountWithCountry(country){
             var convCurr = data['originalCurrency'];
             var convAmount = Math.round(data['convertedAmount']*100)/100;
             $("#outcome").text("Amount: " + convAmount+ " " + preffCurr + " from " + amount +  " " + convCurr);
+            var bmiExist = data["bmiDataAvailable"];
+            $("#bmiCustom").html("BMI in " +preffCurr);
+            if(bmiExist != null && bmiExist == true){
+                $("#tableBMI tbody").empty();
+                var bmiString = "";
+                
+                for (i = 0; i < data.cityComparison.length; i++){
+                    var bmiCity = data.cityComparison[i].city;
+                    var bmiCountry = data.cityComparison[i].country;
+                    var prefCurrencyAmount = Math.round(data.cityComparison[i].prefCurrencyAmount*100)/100;
+                    var dollarAmount = Math.round(data.cityComparison[i].dollarAmount*100)/100;
+                    bmiString = bmiString + bmiCity+", "+bmiCountry+" "+prefCurrencyAmount+" " +preffCurr + " "+dollarAmount + " $" + "<br>\n";
+                    //$("#tableBMI").find(".table").append("<tr><td>"+bmiCity+"</td><td>"+bmiCountry+"</td><td>"+prefCurrencyAmount+"</td><td>"+dollarAmount+"</td></tr>");
+                    $("#tableBMI").append("<tr><td>"+bmiCity+"</td><td>"+bmiCountry+"</td><td>"+prefCurrencyAmount+"</td><td>"+dollarAmount+"</td></tr>");
+                }
+                $("#tableBMI").show();
+                console.log(bmiString);
+                //$("#bigmac").html(bmiString);
+            }
+            else {
+                $("#tableBMI").hide();
+                $("#tableBMI tbody").empty();
+            }
             console.log(prefCurr + "\n" + convCurr + "\n" + amount);
 			console.log(data);
 
@@ -146,7 +179,7 @@ function getAmountWithCountry(country){
 
 function getAmountWithCity(city){
     var amount = $('#toAmount').val();
-    var preffCurr = $('#currency').val();
+    var preffCurr = $('#currency').val().toUpperCase();
     $.ajax({
         url: 'http://localhost:8192' + '/api/v1/conversion?preferredCurrency='+preffCurr+'&amount='+amount + '&city='+city + '&includeBMI=true',
         method: "GET",
@@ -160,6 +193,29 @@ function getAmountWithCity(city){
             var convCurr = data['originalCurrency'];
             var convAmount = Math.round(data['convertedAmount']*100)/100;
             $("#outcome").text("Amount: " + convAmount+ " " + preffCurr + " from " + amount +  " " + convCurr);
+            var bmiExist = data["bmiDataAvailable"];
+            $("#bmiCustom").html("BMI in " +preffCurr);
+            if(bmiExist != null && bmiExist == true){
+                $("#tableBMI tbody").empty();
+                var bmiString = "";
+                
+                for (i = 0; i < data.cityComparison.length; i++){
+                    var bmiCity = data.cityComparison[i].city;
+                    var bmiCountry = data.cityComparison[i].country;
+                    var prefCurrencyAmount = Math.round(data.cityComparison[i].prefCurrencyAmount*100)/100;
+                    var dollarAmount = Math.round(data.cityComparison[i].dollarAmount*100)/100;
+                    bmiString = bmiString + bmiCity+", "+bmiCountry+" "+prefCurrencyAmount+" " +preffCurr + " "+dollarAmount + " $" + "<br>\n";
+                    //$("#tableBMI").find(".table").append("<tr><td>"+bmiCity+"</td><td>"+bmiCountry+"</td><td>"+prefCurrencyAmount+"</td><td>"+dollarAmount+"</td></tr>");
+                    $("#tableBMI").append("<tr><td>"+bmiCity+"</td><td>"+bmiCountry+"</td><td>"+prefCurrencyAmount+"</td><td>"+dollarAmount+"</td></tr>");
+                }
+                $("#tableBMI").show();
+                console.log(bmiString);
+                //$("#bigmac").html(bmiString);
+            }
+            else {
+                $("#tableBMI").hide();
+                $("#tableBMI tbody").empty();
+            }
             console.log(prefCurr + "\n" + convCurr + "\n" + amount);
 			console.log(data);
 
@@ -181,4 +237,5 @@ function failedToRetrieve(position) {
 $(document).ready(function(){
     $('#type').hide();
     $('#location').hide();
+    $("#tableBMI").hide();
 });
