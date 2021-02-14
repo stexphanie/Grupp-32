@@ -2,11 +2,11 @@ Installationsinstruktioner:
 1. Installera Java och se till att %JAVA_HOME% och PATH fungerar.
 
 Alternativ 1. (enklare).
-2. Kör start.bat i Backend/ mappen.
+2. Kör start.bat/sh i Backend/ mappen.
 3. För att stänga av API-servern skriv in "exit" i rutan, annars låt den vara öppen.
 Alternativ 2.
 2. Kompilera projektet med maven, och för över jar filen med dependencies i Backend/ mappen.
-3. Kör start.bat.
+3. Kör start.bat/sh.
 4. För att stänga av API-servern skriv in "exit" i rutan, annars låt den vara öppen.
 PS. Ifall java inte hittar några filer, se till att du kör jar filen i Backend/ mappen, då det finns api nycklar och json objekt som måste läsas.
 

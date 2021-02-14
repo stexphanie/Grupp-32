@@ -39,28 +39,34 @@
                 </section>
                 <button id="changeColor" type="btn" onclick="getLocation()">Get amount</button>
                 <p id="outcome"></p>
-                <section id="box3">
-                    <table id="tableBMI">
-                        <thead>
-                        <tr>
-                            <th>City</th>
-                            <th>Country</th>
-                            <th id ="bmiCustom">BMI in</th>
-                            <th>BMI in USD</th>
-                        </tr>    
-                        </thead>
-                        <tbody>
+                
+                <div style="min-height: 260px; max-height: 600px;">
+                    <section id="box3">
+                        <br>
+                        <p>The table shows estimates of what the same product might cost in the following locations.</p>
+                        <table id="tableBMI">
+                            <thead>
+                                <tr>
+                                    <th>City</th>
+                                    <th>Country</th>
+                                    <th id ="bmiCustom">Estimate in</th>
+                                    <th>Estimate in USD</th>
+                                </tr>    
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                    </section>
+                </div>
 
-                        </tbody>
-                    </table>
-                    <p style="position: fixed; bottom: 0px; text-align: center; width: 100%;">
-                        Disclaimer: BMI-adjusted prices are rough estimates, based on Big Mac Index.
-                        Whilst they are not completely accurate, they may prove useful in indicating
-                        how much the prices in different countries might be offset in relation to
-                        each other.
-                        <br><a href="api_doc.html" target="_blank">API Documentation</a>
-                    </p>
-                </section>
+                <p style="text-align: center; width: 100%;">
+                    Disclaimer: BMI-adjusted prices are rough estimates, based on Big Mac Index.
+                    While they are not completely accurate, they may prove useful in indicating
+                    how much the prices in different countries might be offset in relation to
+                    each other.
+                    <br><a href="api_doc.html" target="_blank">API Documentation</a>
+                </p>
             </section>
             
         </section>

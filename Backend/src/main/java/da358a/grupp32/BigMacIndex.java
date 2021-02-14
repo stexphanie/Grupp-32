@@ -1,13 +1,13 @@
 package da358a.grupp32;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.io.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+/**
+ * @author Kasper S. Skott
+ */
 class BigMacIndex {
 
     private static class BMIData {
@@ -19,12 +19,21 @@ class BigMacIndex {
     private String bmiLatestUpdate;
     private Hashtable<String, BMIData> bmiTable;
 
+    /**
+     * Constructs and loads BMI data
+     */
     BigMacIndex() {
         if (!loadBMIData(Path.of("big-mac-raw-index.csv"))) {
             System.err.println("Big Mac Index data is unavailable.");
         }
     }
 
+    /**
+     * Loads and extract relevant data from a file with big mac
+     * index data into memory.
+     * @param file path to file
+     * @return true if successful, otherwise false
+     */
     private boolean loadBMIData(Path file) {
         bmiTable = new Hashtable<>(56);
 
@@ -95,6 +104,15 @@ class BigMacIndex {
         return true;
     }
 
+    /**
+     * Calculates an estimate price based on Big Mac Index.
+     * @param localCurrency
+     * @param prefCurrency
+     * @param prefAmount
+     * @param otherCurrency
+     * @param city
+     * @return
+     */
     BMIAdjustedCityPrice getAdjustedPrice(String localCurrency,
             String prefCurrency, double prefAmount,
             String otherCurrency, String city)
@@ -118,6 +136,16 @@ class BigMacIndex {
         return ret;
     }
 
+    /**
+     * Appends the currency response with BMI data. This method expects
+     * the response to already have valid data in the following members:
+     * - prefCurrency
+     * - convertedAmount
+     * - originalCurrency
+     * - originalAmount
+     * @param response
+     * @return a reference to the same object that was passed in.
+     */
     CurrencyResponse appendResponse(CurrencyResponse response) {
         double prefAmount = response.convertedAmount;
         String prefCurrency = response.prefCurrency;
@@ -192,22 +220,6 @@ class BigMacIndex {
         response.cityComparison.remove(e);
 
         return response;
-    }
-
-    public static void main(String[] args) {
-        BigMacIndex bmi = new BigMacIndex();
-
-        CurrencyResponse response = new CurrencyResponse();
-        response.prefCurrency = "SEK";
-        response.convertedAmount = 137.6576501825;
-        response.originalCurrency = "THB";
-        response.originalAmount = 500;
-
-        bmi.appendResponse(response);
-
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        System.out.println(gson.toJson(response));
-
     }
 
 }

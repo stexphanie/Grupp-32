@@ -97,3 +97,5 @@ currencykey.txt
 # CACHE FILE
 currency_cache.json
 
+# Always include the jar-file
+!Backend/Server.jar
